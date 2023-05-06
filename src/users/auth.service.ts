@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { randomBytes, scrypt } from 'crypto';
 import { UsersService } from 'src/users/users.service';
@@ -32,7 +33,7 @@ export class AuthService {
     const [user] = await this.usersService.find(email);
 
     if (!user) {
-      throw new ForbiddenException('wrong email or password');
+      throw new NotFoundException('User is not found');
     }
 
     const [salt, storedHash] = user.password.split('.');
